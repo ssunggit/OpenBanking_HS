@@ -4,8 +4,10 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.account.vo.AccountVO;
+import model.member.vo.MemberVO;
 import service.AccountService;
 
 public class accountOpendProcessController implements Controller {
@@ -23,10 +25,13 @@ public class accountOpendProcessController implements Controller {
 		
 		request.setCharacterEncoding("utf-8");
 		
+		// 로그인한 객체 정보 받아오기
+		HttpSession session = request.getSession();
+		MemberVO loginVO = (MemberVO)(session.getAttribute("loginVO"));
+		
 		String accountPW = request.getParameter("accountPW");
 		int balance = Integer.parseInt(request.getParameter("balance"));
 		String accountAlias = request.getParameter("accountAlias");
-		
 		AccountVO accountVO = new AccountVO();
 		
 		accountVO.setAccountNumber(accountNumber);
@@ -34,6 +39,7 @@ public class accountOpendProcessController implements Controller {
 		accountVO.setBalance(balance);
 		accountVO.setAccountAlias(accountAlias);
 		accountVO.setBankCode("003");
+		accountVO.setId(loginVO.getId());
 
 		AccountService service = new AccountService();
 		
